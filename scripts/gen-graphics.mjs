@@ -1,40 +1,24 @@
-// Generuje grafiki marki: logo (SVG/PNG), kartę Open Graph oraz okładki wpisów bloga.
-// Uruchomienie: node scripts/gen-graphics.mjs            – logo, OG i brakujące okładki
+// Generuje kartę Open Graph oraz okładki wpisów bloga. Pliki logo i ikony: node scripts/gen-brand.mjs
+// Uruchomienie: node scripts/gen-graphics.mjs            – OG i brakujące okładki
 //               node scripts/gen-graphics.mjs --force    – nadpisuje także istniejące okładki
 import fs from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
+import { markAt, textPath, wordmarkAt } from "./lib/brand.mjs";
 
 const PINE = "#003366", PINE2 = "#0a4a85", PINE3 = "#0f6b78", LIME = "#bfe6ea", PAPER = "#f6faf9", MINT = "#dceef0";
 const force = process.argv.includes("--force");
 
-const mark = (x, y, size, inverted = false) => {
-  const s = size / 48;
-  const bg = inverted ? "#ffffff" : PINE, fg = inverted ? PINE : "#ffffff", bead = inverted ? PINE3 : LIME;
-  return `<g transform="translate(${x} ${y}) scale(${s})"><rect width="48" height="48" rx="12" fill="${bg}"/><rect x="10" y="27" width="6.5" height="11" rx="2" fill="${fg}" opacity=".6"/><rect x="20.75" y="20" width="6.5" height="18" rx="2" fill="${fg}" opacity=".8"/><rect x="31.5" y="12" width="6.5" height="26" rx="2" fill="${fg}"/><path d="M9.5 20.5 L19 13.5 L25 17 L35.5 7.5" fill="none" stroke="${bead}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M30.5 7.2 H36 V12.7" fill="none" stroke="${bead}" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></g>`;
-};
+const mark = (x, y, size) => markAt(x, y, size, { fg: "#ffffff", accent: LIME });
 const dots = (w, h, id = "d") => `<defs><pattern id="${id}" width="26" height="26" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.3" fill="${LIME}" opacity=".22"/></pattern></defs><rect width="${w}" height="${h}" fill="url(#${id})"/>`;
-
-/* ---------- logo ---------- */
-fs.mkdirSync("public/brand", { recursive: true });
-const wordmark = (fill, accent, sub) =>
-  `<text x="64" y="33" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="30" font-weight="800" letter-spacing="-0.8" fill="${fill}">E<tspan fill="${accent}">-</tspan>Numerika</text><text x="65" y="47" font-family="Arial, Helvetica, sans-serif" font-size="8.2" font-weight="700" letter-spacing="2.6" fill="${sub}">BIURO RACHUNKOWE</text>`;
-const logoSvg = (dark) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 52" width="750" height="156">${mark(2, 2, 48, dark)}${wordmark(dark ? "#fff" : PINE, dark ? LIME : PINE3, dark ? "#b7c9d6" : "#6b7a7d")}</svg>`;
-fs.writeFileSync("public/brand/e-numerika-logo.svg", logoSvg(false));
-fs.writeFileSync("public/brand/e-numerika-logo-jasne.svg", logoSvg(true));
-fs.writeFileSync("public/brand/e-numerika-sygnet.svg", `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">${mark(0, 0, 48)}</svg>`);
-await sharp(Buffer.from(logoSvg(false)), { density: 300 }).resize({ width: 1500 }).png().toFile("public/brand/e-numerika-logo.png");
-await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 52" width="1500" height="312"><rect width="250" height="52" fill="${PINE}"/>${mark(2, 2, 48, true)}${wordmark("#fff", LIME, "#b7c9d6")}</svg>`)).png().toFile("public/brand/e-numerika-logo-na-ciemnym.png");
-await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="512" height="512">${mark(0, 0, 48)}</svg>`)).png().toFile("public/logo-512.png");
-await sharp(Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="180" height="180"><rect width="48" height="48" fill="${PINE}"/>${mark(0, 0, 48)}</svg>`)).png().toFile("src/app/apple-icon.png");
 
 /* ---------- karta Open Graph ---------- */
 const og = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
 <rect width="1200" height="630" fill="${PINE}"/>${dots(1200, 630)}
 <circle cx="1080" cy="80" r="260" fill="${LIME}" opacity=".13"/>
 ${mark(80, 76, 84, true)}
-<text x="186" y="126" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="46" font-weight="700" fill="#fff">E<tspan fill="${LIME}">-</tspan>Numerika</text>
-<text x="188" y="156" font-family="Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="4.5" fill="#b7c9d6">BIURO RACHUNKOWE</text>
+${wordmarkAt("jasne", 186, 128, 50)}
+${textPath("BIURO RACHUNKOWE", { font: "a600", size: 14, x: 189, y: 158, spacing: 4.6, fill: "#b7c9d6" })}
 <text font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="78" font-weight="700" fill="#fff" letter-spacing="-1.5"><tspan x="80" y="330">Księgowość, w której</tspan><tspan x="80" y="420" fill="${LIME}">liczby się zgadzają.</tspan></text>
 <text x="80" y="520" font-family="Arial, sans-serif" font-size="28" fill="#dbe6ee">JDG i spółki z o.o. · kadry i płace · online i pod Szczecinem</text>
 <g transform="translate(880 330)">${[60, 96, 78, 132, 110, 170].map((h, i) => `<rect x="${i * 42}" y="${220 - h}" width="28" height="${h}" rx="8" fill="${i === 5 ? LIME : "#ffffff"}" opacity="${i === 5 ? 1 : 0.2}"/>`).join("")}</g>
@@ -95,7 +79,7 @@ ${motifs[motif]()}
 <rect x="90" y="96" width="${label.length * 17 + 74}" height="54" rx="27" fill="${LIME}"/><circle cx="122" cy="123" r="8" fill="${PINE}"/>
 <text x="144" y="132" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="${PINE}" letter-spacing=".5">${esc(label)}</text>
 <text font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="84" font-weight="700" fill="#fff" letter-spacing="-1.5">${lines.map((l, i) => `<tspan x="90" y="${300 + i * 100}">${esc(l)}</tspan>`).join("")}</text>
-${mark(90, 760, 60, true)}<text x="168" y="800" font-family="'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif" font-size="32" font-weight="700" fill="#fff">E<tspan fill="${LIME}">-</tspan>Numerika</text>
+${mark(90, 760, 60, true)}${wordmarkAt("jasne", 164, 802, 34)}
 </svg>`;
   await sharp(Buffer.from(svg)).webp({ quality: 84 }).toFile(out);
   console.log("cover", slug, motif);

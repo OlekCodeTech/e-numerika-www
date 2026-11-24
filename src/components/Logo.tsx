@@ -1,18 +1,18 @@
 import { cn } from "@/lib/utils";
 
-/** Sygnet: trzy rosnące słupki z linią trendu – wykres, czyli księgowość, w której liczby rosną i się zgadzają. */
+/**
+ * Sygnet: litera „e” narysowana jak wykres kołowy – pierścień z wyróżnionym wycinkiem, poprzeczka jako oś.
+ * Geometria pochodzi ze scripts/lib/brand.mjs (jedno źródło znaku – po zmianie tam trzeba przenieść ścieżki tutaj).
+ */
 export function LogoMark({ className, inverted }: { className?: string; inverted?: boolean }) {
-  const bg = inverted ? "#ffffff" : "#003366";
-  const fg = inverted ? "#003366" : "#ffffff";
-  const accent = inverted ? "#0f6b78" : "#bfe6ea";
+  const fg = inverted ? "#ffffff" : "#003366";
+  const accent = inverted ? "#bfe6ea" : "#0f6b78";
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <rect width="48" height="48" rx="12" fill={bg} />
-      <rect x="10" y="27" width="6.5" height="11" rx="2" fill={fg} opacity="0.6" />
-      <rect x="20.75" y="20" width="6.5" height="18" rx="2" fill={fg} opacity="0.8" />
-      <rect x="31.5" y="12" width="6.5" height="26" rx="2" fill={fg} />
-      <path d="M9.5 20.5 L19 13.5 L25 17 L35.5 7.5" fill="none" stroke={accent} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M30.5 7.2 H36 V12.7" fill="none" stroke={accent} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M25.70 4.57 A19.5 19.5 0 0 1 42.79 18.80 L34.26 18.80 A11.5 11.5 0 0 0 25.70 12.63 Z" fill={accent} />
+      <path d="M24 8.50 A15.5 15.5 0 1 0 35.52 34.37" fill="none" stroke={fg} strokeWidth="8" />
+      <circle cx="35.52" cy="34.37" r="4" fill={fg} />
+      <path d="M10 20.50 H43.18 A19.5 19.5 0 0 1 43.18 27.50 H10 Z" fill={fg} />
     </svg>
   );
 }

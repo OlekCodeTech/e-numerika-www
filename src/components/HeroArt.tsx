@@ -12,9 +12,9 @@ export function Photo({ name, alt, className, priority, ratio = "aspect-[3/2]" }
 }
 
 const slides = [
-  { name: "hero-ksiegowa-przy-monitorze", alt: "Księgowa przy biurku analizuje wyniki firmy na monitorze" },
-  { name: "hero-biurko-z-gory", alt: "Księgowa sprawdza fakturę z kalkulatorem przy laptopie" },
-  { name: "hero-spotkanie-z-klientem", alt: "Księgowa omawia z przedsiębiorcą wykres wyników na tablecie" },
+  { name: "hero-ksiegowa-portret", alt: "Uśmiechnięta księgowa przy biurku z laptopem w jasnym biurze" },
+  { name: "hero-rozmowa-z-klientem", alt: "Księgowa i przedsiębiorca omawiają wyniki firmy przy laptopie" },
+  { name: "hero-klientka-paragon", alt: "Właścicielka kwiaciarni fotografuje paragon telefonem, żeby wysłać go do księgowej" },
 ];
 
 /** Hero strony głównej: pokaz trzech zdjęć (przenikanie + powolne zbliżenie) i trzy „żywe” karty statusu. Animacje w globals.css (.hero-*). */

@@ -30,7 +30,8 @@ Wpis pojawia się automatycznie na blogu, stronie głównej, w mapie strony i do
 | Polityka prywatności | `content/pages/polityka-prywatnosci.md` |
 | Przekierowania starych adresów | `public/.htaccess` |
 | Formularz kontaktowy (PHP) | `public/api/contact.php` + `contact-config.php` na serwerze |
-| Logo i sygnet | `public/brand/` |
+| Logo (pakiet SVG + PNG) | `public/brand/` – generuje `node scripts/gen-brand.mjs`, znak zdefiniowany w `scripts/lib/brand.mjs` |
+| Księga znaku (brandbook) | `brand/E-Numerika-brandbook.pdf` – składa `node scripts/gen-brandbook.mjs` |
 
 ## Zmienne środowiskowe
 
