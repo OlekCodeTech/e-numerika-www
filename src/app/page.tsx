@@ -42,20 +42,22 @@ export default function Home() {
     <>
       <section className="relative overflow-hidden border-b border-line">
         <div aria-hidden className="ledger-lines absolute inset-0" />
+        <div aria-hidden className="hero-blob absolute -left-24 top-10 h-80 w-80 rounded-full bg-sky/50 blur-3xl" />
+        <div aria-hidden className="hero-blob absolute right-[-6rem] top-[-5rem] h-96 w-96 rounded-full bg-mint blur-3xl" style={{ animationDelay: "-8s" }} />
         <Container className="relative grid items-center gap-14 py-14 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:py-24">
           <div>
-            <p className="eyebrow">Biuro rachunkowe · Szczecin · Wieluń · online</p>
-            <h1 className="mt-5 text-pretty text-[2.4rem] leading-[1.08] sm:text-[3.3rem] lg:text-[3.7rem]">
-              Księgowość, w której <span className="text-teal">liczby się zgadzają</span>, a Ty masz spokój.
+            <p className="eyebrow rise">Biuro rachunkowe · Szczecin · Wieluń · online</p>
+            <h1 className="rise [--d:0.08s] mt-5 text-pretty text-[2.4rem] leading-[1.08] sm:text-[3.3rem] lg:text-[3.7rem]">
+              Księgowość, w której <span className="hero-mark text-teal">liczby się zgadzają</span>, a Ty masz spokój.
             </h1>
-            <p className="mt-6 max-w-xl text-lg sm:text-xl">Prowadzimy księgi jednoosobowych działalności i spółek z o.o., kadry i płace oraz sprawozdania. Masz jedną, dedykowaną księgową i stałą cenę znaną z góry.</p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <p className="rise [--d:0.18s] mt-6 max-w-xl text-lg sm:text-xl">Prowadzimy księgi jednoosobowych działalności i spółek z o.o., kadry i płace oraz sprawozdania. Masz jedną, dedykowaną księgową i stałą cenę znaną z góry.</p>
+            <div className="rise [--d:0.28s] mt-8 flex flex-col gap-3 sm:flex-row">
               <Button href="/kalkulator-ksiegowosci/">Policz koszt księgowości</Button>
               <Button href="/oferta/" variant="ghost">
                 Zobacz ofertę
               </Button>
             </div>
-            <CheckList className="mt-9 grid gap-x-8 gap-y-2.5 text-[0.98rem] sm:grid-cols-2" items={[`JDG od ${packs.jdg[0].price} zł netto`, `Spółki od ${packs.spolka[0].price} zł netto`, "Dokumenty online 24/7", "Przejmujemy księgi w trakcie roku"]} />
+            <CheckList className="rise mt-9 grid gap-x-8 gap-y-2.5 text-[0.98rem] sm:grid-cols-2" items={[`JDG od ${packs.jdg[0].price} zł netto`, `Spółki od ${packs.spolka[0].price} zł netto`, "Dokumenty online 24/7", "Przejmujemy księgi w trakcie roku"]} />
           </div>
           <HeroArt />
         </Container>
