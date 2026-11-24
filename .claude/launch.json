@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "enumerika-dev",
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "cd /d C:\Users\olo_p\e-numerika-www && npx next dev -p 3141"],
+      "port": 3141
+    }
+  ]
+}

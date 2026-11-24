@@ -1,0 +1,27 @@
+<?php
+/**
+ * Wzór ustawień formularza. Skopiuj jako contact-config.php:
+ *  - najlepiej KATALOG WYŻEJ niż public_html (np. /home/uXXXX/domains/e-numerika.pl/contact-config.php),
+ *  - albo obok contact.php w public_html/api/ (dostęp z przeglądarki blokuje .htaccess).
+ * Nie commituj prawdziwego pliku do repozytorium.
+ *
+ * Wysyłka przez Google Workspace (poczta domeny jest w Google – rekord SPF dopuszcza tylko Google):
+ *  1. Konto biuro@e-numerika.pl → Zarządzaj kontem Google → Bezpieczeństwo → Weryfikacja dwuetapowa (musi być włączona).
+ *  2. Hasła aplikacji → utwórz „olekcodetech formularz” → skopiuj 16-znakowe hasło do 'pass' poniżej.
+ */
+return [
+    'to' => 'biuro@e-numerika.pl',
+    'from' => 'biuro@e-numerika.pl',
+    'from_name' => 'Formularz e-numerika.pl',
+    'smtp' => [
+        'host' => 'smtp.gmail.com',
+        'port' => 465,
+        'user' => 'biuro@e-numerika.pl',
+        'pass' => 'xxxx xxxx xxxx xxxx', // hasło aplikacji Google
+    ],
+    'rate_limit' => 5,
+    'dry_run' => false,
+    // Google reCAPTCHA v3: klucz TAJNY (Secret key). Klucz witryny (Site key) idzie do .env.production jako NEXT_PUBLIC_RECAPTCHA_SITE_KEY.
+    'recaptcha_secret' => '',
+    'recaptcha_min_score' => 0.5,
+];
