@@ -41,23 +41,33 @@ export const textPath = (text, opts = {}) => {
 };
 
 /**
- * Sygnet: litera „e” narysowana jak wykres kołowy – pierścień z wyróżnionym wycinkiem, poprzeczka jako oś.
+ * Sygnet: litera „e” narysowana jak wykres kołowy – pierścień z wyróżnionym wycinkiem.
+ * Poprzeczka litery to znak równości: „winien = ma”, czyli liczby, które się zgadzają.
  * Pole 48×48, środek (24,24). fg – kolor litery, accent – kolor wycinka.
  */
+const G = { R: 19.5, r: 11.5, c: 24, gap: 1.7, bar: 3.5, eq: 2.6 };
+const f2 = (n) => n.toFixed(2);
+const onRight = (rad, dy) => G.c + Math.sqrt(rad * rad - dy * dy); // x na okręgu po prawej
+/** Sam znak równości (dwie belki przycięte do okręgu). */
+export function equals({ fg = C.navy } = {}) {
+  const { R, c, bar, eq } = G;
+  return [-(eq / 2 + bar), eq / 2].map((o) => {
+    const y1 = c + o, y2 = y1 + bar;
+    return `<path d="M10 ${f2(y1)} H${f2(onRight(R, Math.abs(y1 - c)))} A${R} ${R} 0 0 1 ${f2(onRight(R, Math.abs(y2 - c)))} ${f2(y2)} H10 Z" fill="${fg}"/>`;
+  }).join("");
+}
 export function mark({ fg = C.navy, accent = C.teal } = {}) {
-  const R = 19.5, r = 11.5, c = 24, gap = 1.7, bar = 7;
-  const f = (n) => n.toFixed(2);
+  const { R, r, c, gap, bar, eq } = G;
   const up = (rad, dx) => c - Math.sqrt(rad * rad - dx * dx); // y na okręgu nad środkiem
-  const right = (rad, dy) => c + Math.sqrt(rad * rad - dy * dy); // x na okręgu po prawej
-  const top = c - bar / 2, dyS = bar / 2 + gap; // wycinek kończy się `gap` nad poprzeczką
-  const slice = `M${f(c + gap)} ${f(up(R, gap))} A${R} ${R} 0 0 1 ${f(right(R, dyS))} ${f(c - dyS)} L${f(right(r, dyS))} ${f(c - dyS)} A${r} ${r} 0 0 0 ${f(c + gap)} ${f(up(r, gap))} Z`;
-  const mid = (R + r) / 2, w = R - r, ang = (42 * Math.PI) / 180;
+  const dyS = eq / 2 + bar + gap; // wycinek kończy się `gap` nad górną belką
+  const slice = `M${f2(c + gap)} ${f2(up(R, gap))} A${R} ${R} 0 0 1 ${f2(onRight(R, dyS))} ${f2(c - dyS)} L${f2(onRight(r, dyS))} ${f2(c - dyS)} A${r} ${r} 0 0 0 ${f2(c + gap)} ${f2(up(r, gap))} Z`;
+  const mid = (R + r) / 2, w = R - r, ang = (44 * Math.PI) / 180;
   const ex = c + mid * Math.cos(ang), ey = c + mid * Math.sin(ang);
   return (
     `<path d="${slice}" fill="${accent}"/>` +
-    `<path d="M${c} ${f(c - mid)} A${mid} ${mid} 0 1 0 ${f(ex)} ${f(ey)}" fill="none" stroke="${fg}" stroke-width="${w}"/>` +
-    `<circle cx="${f(ex)}" cy="${f(ey)}" r="${w / 2}" fill="${fg}"/>` +
-    `<path d="M10 ${f(top)} H${f(right(R, bar / 2))} A${R} ${R} 0 0 1 ${f(right(R, bar / 2))} ${f(top + bar)} H10 Z" fill="${fg}"/>`
+    `<path d="M${c} ${f2(c - mid)} A${mid} ${mid} 0 1 0 ${f2(ex)} ${f2(ey)}" fill="none" stroke="${fg}" stroke-width="${w}"/>` +
+    `<circle cx="${f2(ex)}" cy="${f2(ey)}" r="${w / 2}" fill="${fg}"/>` +
+    equals({ fg })
   );
 }
 export const markAt = (x, y, size, opts) => `<g transform="translate(${x} ${y}) scale(${size / 48})">${mark(opts)}</g>`;
@@ -84,12 +94,12 @@ function wordmark(t, x, y, size) {
 }
 
 /** Logo poziome. Zwraca { svg, w, h } – pełny dokument SVG bez zależności od krojów. */
-export function logoH(theme = "kolor", { tagline = true, bg } = {}) {
+export function logoH(theme = "kolor", { tagline = true, bg, noMark = false } = {}) {
   const t = themes[theme];
   const wm = wordmark(t, 62, 33.5, 31);
   const tag = tagline ? outline("BIURO RACHUNKOWE", { font: "a600", size: 8.4, x: 63.2, y: 46.5, spacing: 2.75 }) : null;
   const w = Math.ceil(62 + Math.max(wm.width, tag?.width ?? 0) + 2), h = 52;
-  return { w, h, svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w * 6}" height="${h * 6}">${bg ? `<rect width="${w}" height="${h}" fill="${bg}"/>` : ""}${markAt(2, tagline ? 2 : 2, 48, t)}${wm.svg}${tag ? `<path d="${tag.d}" fill="${t.sub}"/>` : ""}</svg>` };
+  return { w, h, svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w * 6}" height="${h * 6}">${bg ? `<rect width="${w}" height="${h}" fill="${bg}"/>` : ""}${noMark ? "" : markAt(2, 2, 48, t)}${wm.svg}${tag ? `<path d="${tag.d}" fill="${t.sub}"/>` : ""}</svg>` };
 }
 
 /** Logo pionowe (sygnet nad nazwą). */

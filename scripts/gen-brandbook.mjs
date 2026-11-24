@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
-import { C, logoH, logoV, mark, tile } from "./lib/brand.mjs";
+import { C, equals, logoH, logoV, mark, tile } from "./lib/brand.mjs";
 
 const inner = (doc) => doc.svg.replace(/ width="\d+" height="\d+"/, "");
 const H = (t = "kolor", o) => inner(logoH(t, o));
@@ -67,7 +67,7 @@ const photo = (n) => `../public/images/photos/${n}.webp`;
 let no = 0;
 const page = (section, title, body, cls = "") => {
   no++;
-  return `<section class="page ${cls}"><header><span class="kicker">${String(no).padStart(2, "0")} · ${section}</span>${title ? `<h2>${title}</h2>` : ""}</header><div class="body">${body}</div><footer><span class="fl">${H("kolor", { tagline: false })}</span><span>Księga znaku · wersja 1.0 · listopad 2026</span><span>${String(no).padStart(2, "0")}</span></footer></section>`;
+  return `<section class="page ${cls}"><header><span class="kicker">${String(no).padStart(2, "0")} · ${section}</span>${title ? `<h2>${title}</h2>` : ""}</header><div class="body">${body}</div><footer><span class="fl">${H("kolor", { tagline: false })}</span><span>Księga znaku · wersja 1.1 · listopad 2026</span><span>${String(no).padStart(2, "0")}</span></footer></section>`;
 };
 
 const toc = ["Marka", "Głos marki", "Logo – idea", "Budowa znaku", "Wersje logo", "Wersje kolorystyczne", "Pole ochronne i wielkość minimalna", "Logo na tłach", "Czego nie robimy", "Kolory podstawowe", "Kolory uzupełniające i kontrast", "Typografia – kroje", "Typografia – hierarchia", "Elementy graficzne", "Fotografia", "Druki firmowe", "Media cyfrowe", "Pliki i kontakt"];
@@ -76,7 +76,7 @@ const pages = [];
 
 /* okładka */
 no++;
-pages.push(`<section class="page cover"><div class="cmark">${M(white)}</div><div class="ctext"><p class="kicker light">Księga znaku</p><h1>E‑Numerika</h1><p class="sub">Biuro rachunkowe · system identyfikacji wizualnej</p></div><p class="cfoot">Wersja 1.0 · listopad 2026</p><div class="cring">${M({ fg: "#0a4a85", accent: "#0f6b78" })}</div></section>`);
+pages.push(`<section class="page cover"><div class="cmark">${M(white)}</div><div class="ctext"><p class="kicker light">Księga znaku</p><h1>E‑Numerika</h1><p class="sub">Biuro rachunkowe · system identyfikacji wizualnej</p></div><p class="cfoot">Wersja 1.1 · listopad 2026</p><div class="cring">${M({ fg: "#0a4a85", accent: "#0f6b78" })}</div></section>`);
 
 /* spis treści */
 pages.push(page("Spis treści", "Co znajdziesz w tej księdze", `<div class="toc">${toc.map((t, i) => `<div><span>${String(i + 3).padStart(2, "0")}</span>${t}</div>`).join("")}</div>
@@ -103,14 +103,14 @@ pages.push(page("Głos marki", "Jak mówimy", `<div class="cols c2"><div>
 <p class="note">Nazwę zapisujemy zawsze <b>E‑Numerika</b>: wielkie E, łącznik, wielkie N. W adresach: e-numerika.pl. Nie piszemy „eNumerika”, „E Numerika” ani „Numerika”.</p>`));
 
 /* logo – idea */
-pages.push(page("Logo – idea", "Litera „e”, która jest wykresem", `<div class="cols idea"><div class="stage">${H()}</div>
-<div><p class="lead">Sygnet to litera „e” od E‑Numeriki narysowana jak wykres kołowy.</p>
-<div class="idea3"><div>${M({ fg: C.navy, accent: C.line })}<b>Pierścień</b><p>Całość finansów firmy, zamknięta i policzona.</p></div><div>${M({ fg: C.line, accent: C.teal })}<b>Wycinek</b><p>Ćwiartka koła: kwartał, udział, wynik, który widać od razu.</p></div><div><svg viewBox="0 0 48 48"><g opacity=".18">${mark()}</g><path d="M10 20.5 H43.18 A19.5 19.5 0 0 1 43.18 27.5 H10 Z" fill="${C.navy}"/></svg><b>Poprzeczka</b><p>Linia księgi: wiersz, w którym zapisuje się liczby.</p></div></div></div></div>`));
+pages.push(page("Logo – idea", "Litera „e”, wykres i znak równości", `<div class="cols idea"><div class="stage">${H()}</div>
+<div><p class="lead">Sygnet to litera „e” od E‑Numeriki narysowana jak wykres kołowy. Jej poprzeczka to znak równości.</p>
+<div class="idea3"><div>${M({ fg: C.navy, accent: C.line })}<b>Pierścień</b><p>Całość finansów firmy, zamknięta i policzona.</p></div><div>${M({ fg: C.line, accent: C.teal })}<b>Wycinek</b><p>Ćwiartka koła: kwartał, udział, wynik, który widać od razu.</p></div><div><svg viewBox="0 0 48 48"><g opacity=".18">${mark()}</g>${equals()}</svg><b>Znak równości</b><p>Winien = ma. Księgowość, w której liczby się zgadzają.</p></div></div></div></div>`));
 
 /* budowa */
 const grid = Array.from({ length: 13 }, (_, i) => `<path d="M${i * 4} 0V48M0 ${i * 4}H48" stroke="${C.line}" stroke-width=".12"/>`).join("");
 pages.push(page("Budowa znaku", "Konstrukcja sygnetu", `<div class="cols build"><div class="stage gridst"><svg viewBox="-4 -4 56 56">${grid}<circle cx="24" cy="24" r="19.5" fill="none" stroke="${C.teal}" stroke-width=".15" stroke-dasharray=".8 .6"/><circle cx="24" cy="24" r="11.5" fill="none" stroke="${C.teal}" stroke-width=".15" stroke-dasharray=".8 .6"/><path d="M24 -3V51M-3 24H51" stroke="${C.teal}" stroke-width=".15"/>${mark()}<path d="M4.5 49.500H43.500" stroke="${C.ink}" stroke-width=".2"/><path d="M4.500 48.700v1.600M43.500 48.700v1.600" stroke="${C.ink}" stroke-width=".2"/><text x="24" y="51.600" text-anchor="middle" font-size="1.700" fill="${C.ink}" font-family="Archivo">39 j.</text></svg></div>
-<div><table class="spec"><tr><td>Pole znaku</td><td>48 × 48 jednostek</td></tr><tr><td>Średnica zewnętrzna</td><td>39 j.</td></tr><tr><td>Grubość pierścienia</td><td>8 j.</td></tr><tr><td>Grubość poprzeczki</td><td>7 j.</td></tr><tr><td>Odstęp wycinka</td><td>1,7 j. od pierścienia i poprzeczki</td></tr><tr><td>Wycinek</td><td>prawa górna ćwiartka koła</td></tr><tr><td>Zakończenie litery</td><td>zaokrąglone, 42° poniżej osi</td></tr></table>
+<div><table class="spec"><tr><td>Pole znaku</td><td>48 × 48 jednostek</td></tr><tr><td>Średnica zewnętrzna</td><td>39 j.</td></tr><tr><td>Grubość pierścienia</td><td>8 j.</td></tr><tr><td>Znak równości</td><td>dwie belki po 3,5 j., odstęp 2,6 j.</td></tr><tr><td>Odstęp wycinka</td><td>1,7 j. od pierścienia i znaku równości</td></tr><tr><td>Wycinek</td><td>prawa górna ćwiartka koła</td></tr><tr><td>Zakończenie litery</td><td>zaokrąglone, 44° poniżej osi</td></tr></table>
 <p class="note">Sygnetu nie rysujemy od nowa. Zawsze używamy gotowych plików z pakietu (strona „Pliki i kontakt”). Proporcje sygnetu do napisu są stałe i zapisane w plikach.</p></div></div>`));
 
 /* wersje */
@@ -136,9 +136,9 @@ pages.push(page("Wersje kolorystyczne", "Kolor, kontra i jeden kolor", `<div cla
 pages.push(page("Pole ochronne i wielkość minimalna", "Logo potrzebuje oddechu", `<div class="cols c2"><div>
 <div class="stage clear"><div class="cz">${H()}<i class="x t">½ S</i><i class="x l">½ S</i></div></div>
 <p>Wokół logo zostawiamy wolne pole równe <b>połowie wysokości sygnetu (½ S)</b>. W tym polu nie umieszczamy tekstu, zdjęć, krawędzi ani innych znaków.</p></div>
-<div><table class="spec"><tr><th></th><th>Druk</th><th>Ekran</th></tr><tr><td>Pozioma z podpisem</td><td>min. 35 mm szer.</td><td>min. 160 px szer.</td></tr><tr><td>Pozioma bez podpisu</td><td>min. 22 mm szer.</td><td>min. 100 px szer.</td></tr><tr><td>Pionowa</td><td>min. 22 mm szer.</td><td>min. 110 px szer.</td></tr><tr><td>Sygnet / ikona</td><td>min. 6 mm</td><td>min. 16 px</td></tr></table>
-<div class="mins"><div style="width:35mm">${H()}</div><div style="width:22mm">${H("kolor", { tagline: false })}</div><div style="width:6mm">${M()}</div></div>
-<p class="note">Wielkości minimalne w skali 1:1 przy wydruku na A4 poziomo.</p></div></div>`));
+<div><table class="spec"><tr><th></th><th>Druk</th><th>Ekran</th></tr><tr><td>Pozioma z podpisem</td><td>min. 35 mm szer.</td><td>min. 160 px szer.</td></tr><tr><td>Pozioma bez podpisu</td><td>min. 22 mm szer.</td><td>min. 100 px szer.</td></tr><tr><td>Pionowa</td><td>min. 22 mm szer.</td><td>min. 110 px szer.</td></tr><tr><td>Sygnet / ikona</td><td>min. 8 mm</td><td>min. 24 px</td></tr></table>
+<div class="mins"><div style="width:35mm">${H()}</div><div style="width:22mm">${H("kolor", { tagline: false })}</div><div style="width:8mm">${M()}</div></div>
+<p class="note">Wielkości minimalne w skali 1:1 przy wydruku na A4 poziomo. Poniżej 24 px znak równości zlewa się w jedną poprzeczkę. Dopuszczamy to wyłącznie w faviconie przeglądarki.</p></div></div>`));
 
 /* tła */
 pages.push(page("Logo na tłach", "Zawsze wyraźny kontrast", `<div class="grid6">
@@ -158,7 +158,7 @@ ${bad(`<div style="transform:rotate(-9deg)">${H()}</div>`, "Nie obracamy.")}
 ${bad(`<div style="filter:hue-rotate(150deg) saturate(1.6)">${H()}</div>`, "Nie zmieniamy kolorów.")}
 ${bad(`<div style="filter:drop-shadow(1.2mm 1.2mm 0.8mm rgba(0,0,0,.45))">${H()}</div>`, "Nie dodajemy cieni, obrysów i efektów.")}
 ${bad(H(), "Nie stawiamy na tle o słabym kontraście.", `style="background:${C.teal}"`)}
-${bad(`<div style="display:flex;align-items:center;gap:3mm"><div style="width:62%">${H("kolor").replace(/<path d="M25\.70[\s\S]*?H10 Z" fill="[^"]+"\/>/, "")}</div><div style="width:26%">${M()}</div></div>`, "Nie przestawiamy elementów i nie zmieniamy proporcji.")}
+${bad(`<div style="display:flex;align-items:center;gap:3mm"><div style="width:62%">${H("kolor", { noMark: true })}</div><div style="width:26%">${M()}</div></div>`, "Nie przestawiamy elementów i nie zmieniamy proporcji.")}
 </div>`));
 
 /* kolory podstawowe */

@@ -1,7 +1,8 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Sygnet: litera „e” narysowana jak wykres kołowy – pierścień z wyróżnionym wycinkiem, poprzeczka jako oś.
+ * Sygnet: litera „e” narysowana jak wykres kołowy – pierścień z wyróżnionym wycinkiem.
+ * Poprzeczka litery to znak równości („winien = ma”: liczby, które się zgadzają).
  * Geometria pochodzi ze scripts/lib/brand.mjs (jedno źródło znaku – po zmianie tam trzeba przenieść ścieżki tutaj).
  */
 export function LogoMark({ className, inverted }: { className?: string; inverted?: boolean }) {
@@ -9,10 +10,11 @@ export function LogoMark({ className, inverted }: { className?: string; inverted
   const accent = inverted ? "#bfe6ea" : "#0f6b78";
   return (
     <svg viewBox="0 0 48 48" className={className} aria-hidden="true">
-      <path d="M25.70 4.57 A19.5 19.5 0 0 1 42.79 18.80 L34.26 18.80 A11.5 11.5 0 0 0 25.70 12.63 Z" fill={accent} />
-      <path d="M24 8.50 A15.5 15.5 0 1 0 35.52 34.37" fill="none" stroke={fg} strokeWidth="8" />
-      <circle cx="35.52" cy="34.37" r="4" fill={fg} />
-      <path d="M10 20.50 H43.18 A19.5 19.5 0 0 1 43.18 27.50 H10 Z" fill={fg} />
+      <path d="M25.70 4.57 A19.5 19.5 0 0 1 42.38 17.50 L33.49 17.50 A11.5 11.5 0 0 0 25.70 12.63 Z" fill={accent} />
+      <path d="M24 8.50 A15.5 15.5 0 1 0 35.15 34.77" fill="none" stroke={fg} strokeWidth="8" />
+      <circle cx="35.15" cy="34.77" r="4" fill={fg} />
+      <path d="M10 19.20 H42.90 A19.5 19.5 0 0 1 43.46 22.70 H10 Z" fill={fg} />
+      <path d="M10 25.30 H43.46 A19.5 19.5 0 0 1 42.90 28.80 H10 Z" fill={fg} />
     </svg>
   );
 }
